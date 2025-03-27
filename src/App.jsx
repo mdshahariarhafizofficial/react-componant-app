@@ -8,7 +8,12 @@ import User from './User'
 import { Suspense } from 'react'
 import Post from './Post'
 import Comments from './Comments'
+import Todos from './Todos'
 
+const loadTodos = async()=>{
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos')
+  return res.json();
+};
 const LoadComments = async()=>{
   const res = await fetch('https://jsonplaceholder.typicode.com/comments')
   return res.json()
@@ -25,7 +30,7 @@ const loadPost = async() =>{
 function App() {
   const loadPostPromise = loadPost();
   const loadComments = LoadComments();
-
+  const todosPromise = loadTodos();
   function handleClick(){
     alert('Button-1')
   }
@@ -43,6 +48,9 @@ function App() {
         </a>
       </div>
       <h4>Vite + React</h4>
+      <Suspense fallback = {<h2>Todos is Loading.....</h2>}>
+        <Todos todos = {todosPromise}></Todos>
+      </Suspense>
 
       <Suspense fallback = {<h2 style={{Color: 'red'}}>All Comments Loading....</h2>}>
         <Comments loadComments = {loadComments}></Comments>
